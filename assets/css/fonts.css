@@ -1,0 +1,9 @@
+/* Alegreya Sans — Juan Pablo del Peral, Huerta Tipográfica. SIL Open Font License 1.1.
+   Subset from the google/fonts TTFs with every OpenType feature kept (lnum, tnum, onum, smcp, c2sc, case, frac, locl TRK). */
+@font-face{font-family:'Alegreya Sans';font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/alegreya-sans-400.woff2) format('woff2')}
+@font-face{font-family:'Alegreya Sans';font-style:italic;font-weight:400;font-display:swap;src:url(../fonts/alegreya-sans-400i.woff2) format('woff2')}
+@font-face{font-family:'Alegreya Sans';font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/alegreya-sans-500.woff2) format('woff2')}
+@font-face{font-family:'Alegreya Sans';font-style:italic;font-weight:500;font-display:swap;src:url(../fonts/alegreya-sans-500i.woff2) format('woff2')}
+@font-face{font-family:'Alegreya Sans';font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/alegreya-sans-700.woff2) format('woff2')}
+@font-face{font-family:'Alegreya Sans';font-style:italic;font-weight:700;font-display:swap;src:url(../fonts/alegreya-sans-700i.woff2) format('woff2')}
+@font-face{font-family:'Alegreya Sans';font-style:normal;font-weight:800;font-display:swap;src:url(../fonts/alegreya-sans-800.woff2) format('woff2')}

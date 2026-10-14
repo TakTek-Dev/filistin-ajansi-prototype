@@ -1,0 +1,9 @@
+# working files stay local; only the site is published
+.claude/
+.impeccable/
+research/*
+!research/.keep
+PRODUCT.md
+DESIGN*
+tools/out/
+__pycache__/
