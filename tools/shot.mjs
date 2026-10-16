@@ -37,6 +37,9 @@ try {
   await sleep(300);
   let clip;
   if (mode === 'full') {
+    // lazy images below the fold never load in a single tall capture: load them all first
+    await send('Runtime.evaluate', { expression: "Promise.all([...document.images].map(i=>{i.loading='eager';return (i.complete?Promise.resolve():new Promise(r=>{i.onload=i.onerror=r;setTimeout(r,8000)})).then(()=>i.decode().catch(()=>0))}))", awaitPromise: true });
+    await sleep(400);
     const r = await send('Runtime.evaluate', { expression: 'JSON.stringify([document.documentElement.scrollWidth, document.documentElement.scrollHeight])', returnByValue: true });
     const [sw, sh] = JSON.parse(r.result.value);
     clip = { x: 0, y: 0, width: sw, height: Math.min(sh, 32000), scale: 1 };

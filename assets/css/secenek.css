@@ -1,0 +1,74 @@
+/* Filistin Ajansı — logo options page (Arabic, RTL). Arabic text: no letter-spacing, no italic, roomy leading. */
+@font-face{font-family:'Alexandria';font-style:normal;font-weight:100 900;font-display:swap;src:url(../fonts/alexandria.woff2?v=1) format('woff2')}
+@font-face{font-family:'Montserrat';font-style:normal;font-weight:100 900;font-display:swap;src:url(../fonts/montserrat.woff2?v=1) format('woff2')}
+
+:root{--red:#CE1126;--red-2:#A50E1F;--ink:#111111;--text:#2B2B2B;--muted:#666666;--line:#E3E3E3;--bg:#F2F2F2;--card:#FFFFFF;
+  --ar:'Alexandria', 'Noto Kufi Arabic', 'Tajawal', system-ui, sans-serif;--lat:'Montserrat', system-ui, sans-serif}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--bg);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:400 1.0625rem/1.75 var(--ar);letter-spacing:normal;-webkit-font-smoothing:antialiased}
+h1,h2,p,figure{margin:0}
+h1,h2{color:var(--ink);line-height:1.35;font-weight:700;letter-spacing:normal}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+::selection{background:var(--red);color:#fff}
+.ltr{display:inline-block;direction:ltr;unicode-bidi:isolate;font-family:var(--lat)}
+.skip{position:absolute;right:12px;top:-60px;background:var(--ink);color:#fff;padding:10px 14px}
+.skip:focus{top:12px}
+.kap{max-width:1180px;margin:0 auto;padding-inline:16px}
+
+.bas{background:var(--card);border-top:6px solid var(--red);padding:40px 0 28px;margin-bottom:28px}
+.bas__ust{color:var(--red);font-weight:700;font-size:.9375rem}
+.bas h1{font-size:clamp(2rem, 1.4rem + 2vw, 3rem);margin:6px 0 12px;line-height:1.3}
+.bas__giris{max-width:68ch;color:var(--text)}
+.bas__dizin{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.bas__dizin a{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:4px;text-decoration:none;font-weight:600;color:var(--ink);background:#fff}
+.bas__dizin a:hover{border-color:var(--ink)}
+.bas__dizin .bas__ana{background:var(--red);border-color:var(--red);color:#fff;margin-inline-start:auto}
+.bas__dizin .bas__ana:hover{background:var(--red-2)}
+
+.secenek{background:var(--card);padding:clamp(20px, 3vw, 36px);margin-bottom:24px;scroll-margin-top:16px}
+.secenek__bas{display:flex;align-items:center;gap:14px}
+.secenek__no{width:44px;height:44px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font:800 1.25rem/1 var(--lat);flex:none}
+.secenek__bas h2{font-size:1.625rem}
+.secenek__lat{font-size:.9rem;font-weight:700;color:var(--muted);margin-inline-start:6px}
+.secenek__metin{max-width:70ch;margin:12px 0 22px}
+.secenek__orn{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1.25fr) minmax(0,.8fr);gap:16px}
+.orn figcaption{margin-top:8px;font-size:.875rem;color:var(--muted)}
+.orn__alan{display:grid;place-items:center;aspect-ratio:16/9;border:1px solid var(--line);padding:9%;direction:ltr}
+.orn__alan img{width:100%;height:auto;max-height:100%}
+.orn__ust{display:flex;align-items:center;gap:12px;aspect-ratio:16/9;background:var(--bg);direction:ltr;padding:0;position:relative;overflow:hidden}
+.orn__ust::before{content:"";position:absolute;left:0;right:0;top:0;height:30%;background:var(--red);z-index:1}
+.orn__foto{position:absolute;left:0;right:0;bottom:0;width:100%;height:70%;object-fit:cover}
+.orn__ust::after{content:"";position:absolute;left:0;right:0;bottom:0;height:45%;background:linear-gradient(transparent, rgb(0 0 0 / .8))}
+.orn__baslik{position:absolute;left:5%;right:5%;bottom:7%;z-index:2;color:#fff;font:800 clamp(.625rem, .4rem + .45vw, .8125rem)/1.25 var(--lat);text-align:left;white-space:normal}
+.orn__menu{position:relative;z-index:1;align-self:flex-start;margin:4.6% 0 0 5%;width:18px;height:12px;border-top:2px solid #fff;border-bottom:2px solid #fff}
+.orn__menu::after{content:"";position:absolute;left:0;right:0;top:3px;border-top:2px solid #fff}
+.orn__logo{position:relative;z-index:1;align-self:flex-start;margin-top:3.4%;line-height:0}
+.orn__logo img{height:clamp(18px, 2.2vw, 26px);width:auto}
+.orn__nav{position:relative;z-index:1;align-self:flex-start;margin:5.2% 5% 0 auto;color:#fff;font:800 .625rem/1 var(--lat);white-space:nowrap}
+.orn__ikili{display:flex;align-items:center;justify-content:center;gap:22px;aspect-ratio:1/1;max-height:100%;border:1px solid var(--line);direction:ltr}
+.orn--avatar .orn__ikili{aspect-ratio:auto;height:calc(100% - 30px);min-height:160px}
+.orn__daire{width:min(120px, 48%);aspect-ratio:1;border-radius:50%;overflow:hidden;line-height:0}
+.orn__daire img{width:100%;height:100%}
+.orn__favicon{width:32px;height:32px;line-height:0;box-shadow:0 0 0 1px var(--line)}
+.orn__favicon img{width:100%;height:100%}
+.secenek__eylem{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.dugme{display:inline-flex;align-items:center;gap:6px;min-height:48px;padding:0 20px;border-radius:4px;background:var(--red);color:#fff;font-weight:700;text-decoration:none;border:1px solid var(--red)}
+.dugme:hover{background:var(--red-2);border-color:var(--red-2)}
+.dugme--cizgi{background:#fff;color:var(--ink);border-color:var(--line)}
+.dugme--cizgi:hover{background:#fff;border-color:var(--ink)}
+
+.son-not{background:var(--card);padding:clamp(20px, 3vw, 36px);margin-bottom:28px;border-inline-start:0;border-top:4px solid var(--red)}
+.son-not h2{font-size:1.375rem;margin-bottom:8px}
+.alt{padding:24px 0 40px;color:var(--muted);font-size:.875rem}
+
+@media (max-width:900px){
+  .secenek__orn{grid-template-columns:1fr 1fr}
+  .orn--avatar{grid-column:1/-1}
+  .orn--avatar .orn__ikili{height:auto;min-height:150px}
+}
+@media (max-width:560px){
+  .secenek__orn{grid-template-columns:1fr}
+  .bas__dizin .bas__ana{margin-inline-start:0}
+}

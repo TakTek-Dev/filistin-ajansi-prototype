@@ -4,78 +4,41 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>Filistin Ajansı — Filistin ve Batı Şeria haberleri, yer yer</title>
-<meta name="description" content="Filistin Ajansı: Batı Şeria, Gazze, Kudüs ve esirler. Her haber yeriyle, saatiyle ve kaynağıyla.">
-<meta name="theme-color" content="#FBFCFC" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0F1214" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="assets/brand/favicon.svg?v={{V}}" type="image/svg+xml">
-<link rel="preload" href="assets/fonts/alegreya-sans-800.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/alegreya-sans-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/fonts.css?v={{V}}">
-<link rel="stylesheet" href="assets/css/fa.css?v={{V}}">
-<link rel="stylesheet" href="assets/css/home.css?v={{V}}">
-<script>(function(d){try{var t=localStorage.getItem('fa-tema');if(t)d.dataset.theme=t;
-var r=matchMedia('(prefers-reduced-motion: reduce)').matches,q=/[?&]loader/.test(location.search);
-if(!r&&(q||!sessionStorage.getItem('fa-yuk')))d.classList.add('yuk');
-if(!r&&(q||!sessionStorage.getItem('fa-baski')))d.classList.add('baski-bekle');
-if(q){sessionStorage.removeItem('fa-baski');}}catch(e){}})(document.documentElement)</script>
+<title>Filistin Ajansı — Filistin, Batı Şeria, Kudüs ve Gazze haberleri</title>
+<meta name="description" content="Filistin Ajansı: Filistin’den son dakika haberleri. Batı Şeria, Kudüs, Gazze ve esirler.">
+<meta name="theme-color" content="#CE1126">
+<link rel="icon" href="assets/brand/secenek-1-avatar.svg?v={{V}}" type="image/svg+xml" data-favicon>
+<link rel="preload" href="assets/fonts/montserrat.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/site.css?v={{V}}">
+<script>(function(d){try{var m=/[?&]logo=([1-4])/.exec(location.search),s=m?m[1]:localStorage.getItem('fa-logo');if(m)localStorage.setItem('fa-logo',m[1]);d.dataset.logo=s||'1';if(m)d.dataset.secici='';}catch(e){d.dataset.logo='1'}})(document.documentElement)</script>
 </head>
-<body class="sayfa-home">
+<body>
 <!--
-THESIS: Filistin Ajansı speaks the notation of the West Bank access map. Every report is a legend symbol in its place; the legend is the navigation and the state. It refuses the Turkish portal default: red son-dakika band, card grid, slider.
-OWN-WORLD: one map sheet in a double neatline, folds between panels. Locked inks: ink, base grey, magenta overprint for today, water blue, Green Line green; screens and hatches, never tints. Alegreya Sans: spaced-capital place labels, italic natural names. The nirengi mark.
-STORY: a Turkish reader sees where today happened, reads the lead, walks the West Bank north to south, and finds the source under every number.
-FIRST VIEWPORT: lead story (archive photo, place label, headline of at most three lines) left; today's reports in the middle; the West Bank sheet with the Gaza inset right, symbols overprinted, legend with counts as the filter. Hovering a report draws a leader line to its place.
-FORM: «Lejant», candidate 7 of 7, seed 5e0fa249.
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+THESIS: the Turkish news-portal canon the client named (Hürriyet), executed at full craft for Palestine news: a headline slider, a breaking list, then the West Bank, Kudüs and Gaza.
+OWN-WORLD: red header, white cards on a light grey page, Montserrat, red place tags, archive photos always labelled and always of the story's place.
+STORY: a Turkish reader sees the day's main Palestinian stories at once, then finds the West Bank, Kudüs and Gaza below.
+FIRST VIEWPORT: red header; «Bugün neler oldu?» topics; the manşet slider with numbered pagination beside the Son Dakika list; Sıcak Gündem follows.
+FORM: canon (client choice, round 2).
 -->
-{{LEJANT}}
-{{YUKLEYICI}}
-<div class="pafta-sayfa">
-{{YAKA}}
-<div class="cerceve">
+<a class="skip" href="#icerik">İçeriğe geç</a>
+<div class="tarih-bant"><div class="kap"><span>{{TARIH}}</span><span>Kudüs · İstanbul</span></div></div>
 {{UST}}
-{{CANLI}}
-<main id="icerik">
-
-<section class="ilk ic" aria-labelledby="manset-baslik">
-  {{MANSET}}
-  {{SERIT}}
-  {{AKIS}}
-  {{PAFTA}}
-  <svg class="lider" aria-hidden="true" focusable="false"><path/><circle r="3.5"/></svg>
-</section>
-
-<hr class="kat">
-{{ILIL}}
-
-<hr class="kat">
-{{TOPRAK}}
-
-<hr class="kat">
-{{GAZZE}}
-
-<hr class="kat">
-<div class="ikili ic bant">
-{{ESIRLER}}
+{{GUNDEM}}
+<main id="icerik" class="kap">
+{{MANSET}}
+{{SICAK}}
+{{ALTSIRA}}
+{{BATI}}
 {{KUDUS}}
-</div>
-
-<hr class="kat">
-{{RAKAMLAR}}
-
-<hr class="kat">
-{{FOTO}}
-
-<hr class="kat">
-{{ANALIZ}}
+{{GAZZE}}
+{{ESIRLER}}
 </main>
-<hr class="kat">
+{{RAKAMLAR}}
+{{GALERI}}
+<div class="kap">{{BULTEN}}</div>
 {{ALT}}
-</div>
-</div>
 {{CEKMECE}}
-<script src="assets/js/fa.js?v={{V}}" defer></script>
-<script src="assets/js/home.js?v={{V}}" defer></script>
+{{SECICI}}
+<script src="assets/js/site.js?v={{V}}" defer></script>
 </body>
 </html>
