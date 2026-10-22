@@ -28,9 +28,10 @@ a{color:inherit}
 .bas__dizin .bas__ana:hover{background:var(--red-2)}
 
 .secenek{background:var(--card);padding:clamp(20px, 3vw, 36px);margin-bottom:24px;scroll-margin-top:16px}
-.secenek__bas{display:flex;align-items:center;gap:14px}
+.secenek__bas{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .secenek__no{width:44px;height:44px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font:800 1.25rem/1 var(--lat);flex:none}
 .secenek__bas h2{font-size:1.625rem}
+.secenek__etiket{margin-inline-start:auto;background:var(--ink);color:#fff;font-size:.8125rem;font-weight:700;padding:6px 10px;border-radius:4px;white-space:nowrap}
 .secenek__lat{font-size:.9rem;font-weight:700;color:var(--muted);margin-inline-start:6px}
 .secenek__metin{max-width:70ch;margin:12px 0 22px}
 .secenek__orn{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1.25fr) minmax(0,.8fr);gap:16px}

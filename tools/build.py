@@ -1,6 +1,7 @@
-"""Builds the Filistin Ajansı pages (round 2: the Turkish news-portal canon the client asked for).
+"""Shared components, the homepage and the logo options page of Filistin Ajansı (the Turkish news-portal canon the client asked for).
 
-python -I tools/build.py   (from the project root; run tools/logos.py and tools/photos.py first)
+python -I tools/pages.py   (from the project root; run tools/logos.py and tools/photos.py first) builds every page;
+python -I tools/build.py   builds only these two:
 
 tools/tpl/home.html  -> home.html   (Turkish homepage, close to the Hürriyet arrangement)
 tools/tpl/index.html -> index.html  (Arabic page presenting the four logo options)
@@ -10,7 +11,7 @@ import json, os, re, html, datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 P = lambda *p: os.path.join(ROOT, *p)
-V = '38'   # asset version: bump on every CSS/JS change
+V = '44'   # asset version: bump on every CSS/JS change
 
 NEWS = json.load(open(P('research', 'news.json'), encoding='utf-8'))
 ITEMS = NEWS['items']
@@ -22,6 +23,38 @@ LOCAL = json.load(open(P('tools', 'out', 'photos-local.json'), encoding='utf-8')
 LOGOS = json.load(open(P('tools', 'out', 'logos.json'), encoding='utf-8'))
 TODAY = NEWS['edition']['date']
 EDITION_TIME = NEWS['edition']['time']
+
+BASE_URL = 'https://taktek-dev.github.io/filistin-ajansi-prototype/'
+R = ''          # path prefix back to the site root: '' for root pages, '../' under haber/, absolute for 404.html
+def yol(p):
+    return R + p
+
+BOLGE = {'batı-şeria': ('bati-seria', 'Batı Şeria'), 'kudüs': ('kudus', 'Kudüs'), 'gazze': ('gazze', 'Gazze'),
+         'esirler': ('esirler', 'Esirler'), 'dünya': ('dunya', 'Dünya')}
+KONU = {'zeytin-hasadı': 'Zeytin hasadı', 'yerleşimci': 'Yerleşimci saldırıları', 'şehit-yaralı': 'Şehitler ve yaralılar',
+        'gözaltı': 'Gözaltılar', 'yıkım': 'Yıkımlar', 'esir': 'Esirler', 'baskın': 'Baskınlar', 'siyaset': 'Siyaset',
+        'kapı-kontrol-noktası': 'Kapılar ve kontrol noktaları', 'insani-durum': 'İnsani durum',
+        'gazze-ateşkes': 'Gazze ateşkesi', 'aksa-kudüs': 'Mescid-i Aksa'}
+
+def ascii_tr(s):
+    s = s.replace('İ', 'i').replace('I', 'ı').lower()
+    for a, b in zip('çğıöşüâîû', 'cgiosuaiu'):
+        s = s.replace(a, b)
+    return s
+
+def slugla(s, words=8):
+    parts = [w for w in re.split(r'[^a-z0-9]+', ascii_tr(re.sub(r"['’‘]", '', s))) if w]
+    return '-'.join(parts[:words])
+
+SLUG = {}
+for _it in ITEMS:
+    _s = slugla(_it['headline_tr'])
+    while _s in SLUG.values():
+        _s += '-' + _it['id']
+    SLUG[_it['id']] = _s
+
+def haber_url(iid):
+    return f'haber/{SLUG[iid]}.html'
 
 AY = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
 GUN = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar']
@@ -93,7 +126,9 @@ def etiket(it):
     return '#' + p.upper().replace('İ', 'İ')
 
 def link(it, inner, cls=''):
-    return f'<a class="{cls}" href="{e(it["source_url"])}" target="_blank" rel="noopener">{inner}</a>'
+    """Every headline opens its own story page; the original source is cited on that page."""
+    c = f' class="{cls}"' if cls else ''
+    return f'<a{c} href="{yol(haber_url(it["id"]))}">{inner}</a>'
 
 def img(pid, sizes, cls='', eager=False, alt=None):
     pid = photo_id(pid)
@@ -102,7 +137,9 @@ def img(pid, sizes, cls='', eager=False, alt=None):
     loc, p = LOCAL[pid], PHOTO[pid]
     a = alt if alt is not None else tr_text(p.get('caption_tr', ''))
     load = 'eager" fetchpriority="high' if eager else 'lazy'
-    return (f'<img class="{cls}" src="{loc["src"]}" srcset="{loc["srcset"]}" sizes="{sizes}" width="{loc["w"]}" height="{loc["h"]}" '
+    srcset = ', '.join(yol(part.strip()) for part in loc['srcset'].split(','))
+    c = f'class="{cls}" ' if cls else ''
+    return (f'<img {c}src="{yol(loc["src"])}" srcset="{srcset}" sizes="{sizes}" width="{loc["w"]}" height="{loc["h"]}" '
             f'alt="{e(a)}" loading="{load}" decoding="async">')
 
 def kredi(pid):
@@ -126,8 +163,10 @@ def satir(iid):
     return (f'<li class="satir"><span class="zaman">{zaman(it)}</span>'
             f'<div>{link(it, T(it["headline_tr"]), "satir__baslik")}<span class="etiket">{e(etiket(it))}</span></div></li>')
 
-def bolum_basi(sid, ad, more=True):
-    m = f'<a class="bolum__tum" href="#{sid}">Tümü<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>' if more else ''
+def bolum_basi(sid, ad, more=True, href=None):
+    """Section heading with the red slanted rule; «Tümü» opens the section page."""
+    m = (f'<a class="bolum__tum" href="{yol(href or sid + ".html")}">Tümü<span class="sr"> — {e(ad)}</span>'
+         f'<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>') if more else ''
     return f'<div class="bolum__bas"><h2 id="{sid}-b">{e(ad)}</h2><span class="bolum__cizgi" aria-hidden="true"></span>{m}</div>'
 
 _uid = [0]
@@ -143,10 +182,7 @@ def logo_w(svg, h):
 
 def logo_ust():
     """All four white lockups ride in the header; the chosen one shows (default 1, ?logo=N to preview)."""
-    return ''.join(f'<img class="logo__s" data-secenek="{k}" src="assets/brand/secenek-{k}-beyaz.svg?v={V}" alt="Filistin Ajansı" width="{logo_w(v["beyaz"], 32)}" height="32">' for k, v in LOGOS.items())
-
-def logo_alt():
-    return ''.join(f'<img class="logo__s" data-secenek="{k}" src="assets/brand/secenek-{k}.svg?v={V}" alt="Filistin Ajansı" width="{logo_w(v["renk"], 40)}" height="40">' for k, v in LOGOS.items())
+    return ''.join(f'<img class="logo__s" data-secenek="{k}" src="{yol(f"assets/brand/secenek-{k}-beyaz.svg")}?v={V}" alt="Filistin Ajansı" width="{logo_w(v["beyaz"], 32)}" height="32">' for k, v in LOGOS.items())
 
 ICON = {
     'menu': '<path d="M4 7h16M4 12h16M4 17h16"/>',
@@ -161,32 +197,34 @@ ICON = {
 def ic(n, cls='ikon'):
     return f'<svg class="{cls}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">{ICON[n]}</svg>'
 
-MENU = [('#manset', 'Gündem'), ('#bati-seria', 'Batı Şeria'), ('#kudus', 'Kudüs'), ('#gazze', 'Gazze'), ('#esirler', 'Esirler'),
-        ('#rakamlar', 'Rakamlar'), ('#galeri', 'Foto Galeri'), ('#son-dakika', 'Son Dakika')]
+MENU = [('bati-seria.html', 'Batı Şeria'), ('kudus.html', 'Kudüs'), ('gazze.html', 'Gazze'), ('esirler.html', 'Esirler'),
+        ('rakamlar.html', 'Rakamlar'), ('galeri.html', 'Foto Galeri'), ('son-dakika.html', 'Son Dakika')]
 
-def ust():
-    nav = ''.join(f'<a href="{h}">{e(t)}</a>' for h, t in MENU)
+def menu_links(aktif, extra=''):
+    return ''.join(f'<a href="{yol(h)}"{" aria-current=page" if h == aktif else ""}{extra}>{e(t)}</a>' for h, t in MENU)
+
+def ust(aktif=None):
     return f'''<header class="ust">
   <div class="ust__ic">
     <button class="ust__dugme" type="button" data-menu aria-label="Menüyü aç" aria-expanded="false" aria-controls="cekmece">{ic("menu")}</button>
-    <a class="logo" href="home.html" aria-label="Filistin Ajansı ana sayfa">{logo_ust()}</a>
-    <nav class="ust__menu" aria-label="Bölümler">{nav}</nav>
-    <a class="ust__dugme ust__ara" href="#ara" aria-label="Haberlerde ara">{ic("ara")}</a>
-    <a class="ust__bulten" href="#bulten">Bülten</a>
+    <a class="logo" href="{yol("home.html")}" aria-label="Filistin Ajansı ana sayfa">{logo_ust()}</a>
+    <nav class="ust__menu" aria-label="Bölümler">{menu_links(aktif)}</nav>
+    <a class="ust__dugme ust__ara" href="{yol("arama.html")}" aria-label="Haberlerde ara"{" aria-current=page" if aktif == "arama.html" else ""}>{ic("ara")}</a>
+    <a class="ust__bulten" href="{yol("bulten.html")}"{" aria-current=page" if aktif == "bulten.html" else ""}>Bülten</a>
   </div>
 </header>'''
 
-def cekmece():
-    nav = ''.join(f'<a href="{h}" data-kapat>{e(t)}</a>' for h, t in MENU)
+def cekmece(aktif=None):
+    extra = f'<a href="{yol("arama.html")}">Arama</a><a href="{yol("bulten.html")}">Haber Bülteni</a>'
     return f'''<div class="cekmece" id="cekmece" role="dialog" aria-modal="true" aria-label="Menü" hidden>
   <div class="cekmece__ust"><span class="logo">{logo_ust()}</span><button class="ust__dugme" type="button" data-kapat aria-label="Menüyü kapat">{ic("kapat")}</button></div>
-  <nav aria-label="Bölümler">{nav}</nav>
+  <nav aria-label="Bölümler"><a href="{yol("home.html")}">Ana Sayfa</a>{menu_links(aktif)}{extra}</nav>
   <p class="cekmece__tarih">{date_tr(TODAY, weekday=True)} · {EDITION_TIME}</p>
 </div>'''
 
 def gundem():
     """«Bugün neler oldu?»: a crawl that loops, pauses under the pointer or focus, and stands still for reduced motion."""
-    items = ''.join(f'<li><a href="{e(BY_ID[i]["source_url"])}" target="_blank" rel="noopener"><b>#{e(t)}</b> {T(BY_ID[i]["headline_tr"])}</a></li>' for t, i in TOPICS)
+    items = ''.join(f'<li><a href="{yol(haber_url(i))}"><b>#{e(t)}</b> {T(BY_ID[i]["headline_tr"])}</a></li>' for t, i in TOPICS)
     copy = items.replace('<a ', '<a tabindex="-1" ')
     return f'''<div class="gundem" role="region" aria-label="Bugün neler oldu?">
   <div class="kap gundem__ic"><p class="gundem__ad">Bugün neler oldu?</p>
@@ -234,7 +272,7 @@ def manset():
       <button type="button" data-son-geri aria-label="Önceki son dakika haberleri">{ic("yukari")}</button>
       <button type="button" data-son-ileri aria-label="Sonraki son dakika haberleri">{ic("asagi")}</button></div></div>
     <div class="son__pencere"><ol class="son__liste">{son}</ol></div>
-    <a class="son__tum" href="#bati-seria">Tüm haberler{ic("sag")}</a>
+    <a class="son__tum" href="{yol("son-dakika.html")}">Tüm haberler{ic("sag")}</a>
   </aside>
 </section>'''
 
@@ -276,7 +314,7 @@ def esirler():
 def rakamlar():
     lis = ''.join(f'<li><b>{v}</b><span>{t}</span><a class="rakam__kaynak" href="{e(BY_ID[i]["source_url"])}" target="_blank" rel="noopener">Kaynak: {e(s)}</a></li>' for v, t, s, i in RAKAM)
     return f'''<section class="rakam" id="rakamlar" aria-labelledby="rakamlar-b">
-  <div class="kap">{bolum_basi("rakamlar", "Rakamlarla Filistin", more=False)}<ul class="rakam__liste">{lis}</ul></div>
+  <div class="kap">{bolum_basi("rakamlar", "Rakamlarla Filistin")}<ul class="rakam__liste">{lis}</ul></div>
 </section>'''
 
 def galeri():
@@ -292,7 +330,7 @@ def galeri():
     <div class="bolum__bas"><h2 id="galeri-b">Foto Galeri</h2><span class="bolum__cizgi" aria-hidden="true"></span>
       <div class="galeri__kontrol"><span class="galeri__sayac" aria-live="polite">1 / {n}</span>
       <button type="button" data-galeri-geri aria-label="Önceki fotoğraf">{ic("sol")}</button><button type="button" data-galeri-ileri aria-label="Sonraki fotoğraf">{ic("sag")}</button></div></div>
-    <p class="galeri__not">Arşiv kareleri: olay anında çekilmedi. Her karede çeken ve lisans yazılı.</p>
+    <p class="galeri__not">Arşiv kareleri: olay anında çekilmedi. Her karede çeken ve lisans yazılı. <a href="{yol("galeri.html")}">Tüm fotoğraflar</a></p>
   </div>
   <ul class="galeri__serit" tabindex="0" aria-label="Fotoğraflar, yatay kaydırılır">{figs}</ul>
 </section>'''
@@ -308,17 +346,21 @@ def bulten():
   </form>
 </section>'''
 
+KURUMSAL = [('hakkimizda.html', 'Hakkımızda'), ('kunye.html', 'Künye'), ('iletisim.html', 'İletişim'),
+            ('iletisim.html#reklam', 'Reklam'), ('iletisim.html#ihbar', 'Haber ihbarı'), ('bulten.html', 'Haber Bülteni')]
+
 def alt():
-    sections = ''.join(f'<li><a href="{h}">{e(t)}</a></li>' for h, t in MENU)
+    sections = ''.join(f'<li><a href="{yol(h)}">{e(t)}</a></li>' for h, t in MENU)
     latest = sorted([x for x in ITEMS if x['date'] == TODAY], key=lambda x: x['time'] or '', reverse=True)[:4]
     son = ''.join(f'<li><span class="zaman">{saat(i["time"])}</span>{link(i, T(i["headline_tr"]))}</li>' for i in latest)
-    soc = ''.join(f'<li><a href="#" aria-label="{t} — hesap yakında">{ic(n)}<span>{t}</span></a></li>' for n, t in [('x', 'X'), ('ig', 'Instagram'), ('tg', 'Telegram'), ('yt', 'YouTube')])
-    kurum = ''.join(f'<li><a href="#">{e(x)}</a></li>' for x in ['Hakkımızda', 'Künye', 'İletişim', 'Reklam', 'Haber ihbarı'])
-    yasal = ' '.join(f'<a href="#">{e(x)}</a>' for x in ['Gizlilik', 'Çerezler', 'Kullanım koşulları'])
+    soc = ''.join(f'<li><a href="{yol("iletisim.html#sosyal")}" aria-label="{t}: hesap yakında açılacak">{ic(n)}<span>{t}</span></a></li>' for n, t in [('x', 'X'), ('ig', 'Instagram'), ('tg', 'Telegram'), ('yt', 'YouTube')])
+    kurum = ''.join(f'<li><a href="{yol(h)}">{e(x)}</a></li>' for h, x in KURUMSAL)
+    yasal = ' '.join(f'<a href="{yol(h)}">{e(x)}</a>' for h, x in [('gizlilik.html', 'Gizlilik'), ('gizlilik.html#cerezler', 'Çerezler'),
+                                                                   ('gizlilik.html#kosullar', 'Kullanım koşulları'), ('index.html', 'Logo seçenekleri')])
     return f'''<footer class="alt">
   <div class="kap alt__ust">
     <div class="alt__marka">
-      <a class="logo logo--alt" href="home.html" aria-label="Filistin Ajansı ana sayfa">{logo_ust()}</a>
+      <a class="logo logo--alt" href="{yol("home.html")}" aria-label="Filistin Ajansı ana sayfa">{logo_ust()}</a>
       <p>Filistin’in, Batı Şeria’nın, Kudüs’ün ve Gazze’nin haberleri, Türkçe. Her haber yeri, saati ve kaynağıyla.</p>
       <ul class="alt__sosyal">{soc}</ul>
     </div>
@@ -331,18 +373,23 @@ def alt():
   <div class="alt__alt"><div class="kap">
     <p>© 2026 Filistin Ajansı. Bu prototipteki haberler {date_tr(TODAY)} tarihli kamuya açık kaynaklardan derlendi; fotoğraflar Wikimedia Commons arşivindendir. Sosyal medya hesapları ve künye yakında.</p>
     <p class="alt__yasal">{yasal}</p>
-    <a class="alt__yukari" href="#">Yukarı{ic("yukari")}</a>
+    <a class="alt__yukari" href="#icerik">Yukarı{ic("yukari")}</a>
   </div></div>
 </footer>'''
 
+# Logo 1 is the site logo. ?logo=N (from the options page) previews another one for the rest of the browser session,
+# with the switcher bar showing; a fresh visit is always logo 1.
+LOGOJS = ("<script>(function(d){try{var m=/[?&]logo=([1-4])/.exec(location.search),s=m?m[1]:sessionStorage.getItem('fa-logo');"
+          "if(m)sessionStorage.setItem('fa-logo',m[1]);d.dataset.logo=s||'1';if(s)d.dataset.secici='';}catch(e){d.dataset.logo='1'}})(document.documentElement)</script>")
+
 def secici():
-    """Shown only when the page is opened from the logo options page (?logo=N)."""
+    """Shown only while a logo is being previewed from the options page (?logo=N, kept for the browser session)."""
     b = ''.join(f'<button type="button" data-logo-sec="{k}">{k} · {e(v["name"])}</button>' for k, v in LOGOS.items())
-    return f'<div class="secici" hidden><span>Logo seçeneği</span>{b}<a href="index.html">Tüm seçenekler</a></div>'
+    return f'<div class="secici" hidden><span>Logo seçeneği</span>{b}<a href="{yol("index.html")}">Tüm seçenekler</a></div>'
 
 def build_home():
     tpl = open(P('tools', 'tpl', 'home.html'), encoding='utf-8').read()
-    rep = {'V': V, 'UST': ust(), 'GUNDEM': gundem(), 'SICAK': sicak(), 'MANSET': manset(), 'ALTSIRA': alt_sira(),
+    rep = {'V': V, 'LOGOJS': LOGOJS, 'UST': ust(), 'GUNDEM': gundem(), 'SICAK': sicak(), 'MANSET': manset(), 'ALTSIRA': alt_sira(),
            'BATI': bolum('bati-seria'), 'KUDUS': bolum('kudus'), 'GAZZE': bolum('gazze'), 'ESIRLER': esirler(),
            'RAKAMLAR': rakamlar(), 'GALERI': galeri(), 'BULTEN': bulten(), 'ALT': alt(), 'CEKMECE': cekmece(), 'SECICI': secici(),
            'TARIH': f'{date_tr(TODAY, weekday=True)}'}
@@ -364,14 +411,14 @@ def build_index():
     for k, v in LOGOS.items():
         ad, metin = SECENEK_AR[k]
         blocks += f'''<section class="secenek" id="secenek-{k}" aria-labelledby="secenek-{k}-b">
-  <div class="secenek__bas"><span class="secenek__no">{k}</span><h2 id="secenek-{k}-b">{ad} <span class="ltr secenek__lat">{e(v["name"])}</span></h2></div>
+  <div class="secenek__bas"><span class="secenek__no">{k}</span><h2 id="secenek-{k}-b">{ad} <span class="ltr secenek__lat">{e(v["name"])}</span></h2>{'<span class="secenek__etiket">المعتمد حاليًا في الموقع</span>' if k == '1' else ''}</div>
   <p class="secenek__metin">{metin}</p>
   <div class="secenek__orn">
     <figure class="orn orn--beyaz"><div class="orn__alan"><img src="assets/brand/secenek-{k}.svg?v={V}" alt="الخيار {k} على خلفية بيضاء" width="{logo_w(v['renk'], 120)}" height="120"></div><figcaption>على خلفية بيضاء</figcaption></figure>
     <figure class="orn orn--ust"><div class="orn__ust"><img class="orn__foto" src="{LOCAL['p03']['src'].replace('1280', '640')}" alt="" loading="lazy"><span class="orn__baslik ltr" aria-hidden="true">Yerleşimciler Turmus Ayya’da zeytin toplayan Filistinlilere saldırdı</span><span class="orn__menu" aria-hidden="true"></span><span class="orn__logo"><img src="assets/brand/secenek-{k}-beyaz.svg?v={V}" alt="الخيار {k} في رأس الموقع" width="{logo_w(v['beyaz'], 26)}" height="26"></span><span class="orn__nav ltr" aria-hidden="true">BATI ŞERİA&nbsp;&nbsp;KUDÜS&nbsp;&nbsp;GAZZE</span></div><figcaption>في رأس الموقع</figcaption></figure>
     <figure class="orn orn--avatar"><div class="orn__ikili"><span class="orn__daire"><img src="assets/brand/secenek-{k}-avatar.svg?v={V}" alt="صورة الحساب للخيار {k}" width="120" height="120"></span><span class="orn__favicon"><img src="assets/brand/secenek-{k}-avatar.svg?v={V}" alt="" width="32" height="32"></span></div><figcaption>صورة الحساب وأيقونة المتصفح</figcaption></figure>
   </div>
-  <div class="secenek__eylem"><a class="dugme" href="home.html?logo={k}">شاهده في الصفحة الرئيسية</a><a class="dugme dugme--cizgi" href="assets/brand/secenek-{k}.svg" download>تحميل الشعار <span class="ltr">SVG</span></a></div>
+  <div class="secenek__eylem"><a class="dugme" href="home.html?logo={k}">شاهده في الموقع</a><a class="dugme dugme--cizgi" href="assets/brand/secenek-{k}.svg" download>تحميل الشعار <span class="ltr">SVG</span></a></div>
 </section>'''
     tpl = open(P('tools', 'tpl', 'index.html'), encoding='utf-8').read()
     out = re.sub(r'\{\{(\w+)\}\}', lambda m: {'V': V, 'BLOKLAR': blocks}[m.group(1)], tpl)

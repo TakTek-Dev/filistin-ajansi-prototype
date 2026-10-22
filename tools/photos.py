@@ -13,6 +13,7 @@ data = json.load(open(os.path.join(ROOT, 'research', 'photos.json'), encoding='u
 photos = data['photos'] if isinstance(data, dict) else data
 BIG = {'p03'}          # the lead photo gets the larger source
 WIDTHS = (1280, 640)
+CROP = {'p45': (0.052, 0.141, 0.896, 0.672)}   # x, y, w, h as fractions: cut a burned-in frame, caption and watermark
 
 local = {}
 for p in photos:
@@ -34,15 +35,18 @@ for p in photos:
     probe = subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', raw],
                            capture_output=True, text=True).stdout.strip().split(',')
     sw, sh = int(probe[0]), int(probe[1])
+    crop = ''
+    if p['id'] in CROP:
+        fx, fy, fw, fh = CROP[p['id']]
+        cw, ch = round(sw * fw / 2) * 2, round(sh * fh / 2) * 2
+        crop = f'crop={cw}:{ch}:{round(sw * fx)}:{round(sh * fy)},'
+        sw, sh = cw, ch
     made = []
-    for w in WIDTHS:
-        if w > sw and w != WIDTHS[-1]:
-            continue
-        tw = min(w, sw)
+    for tw in sorted({min(w, sw) for w in WIDTHS}, reverse=True):   # a source narrower than 1280 keeps its own width
         th = round(sh * tw / sw / 2) * 2
         dst = os.path.join(OUT, f"{p['id']}-{tw}.webp")
         if not os.path.exists(dst):
-            subprocess.run(['ffmpeg', '-y', '-v', 'error', '-i', raw, '-vf', f'scale={tw}:{th}:flags=lanczos', '-c:v', 'libwebp', '-quality', '76', '-compression_level', '6', dst], check=True)
+            subprocess.run(['ffmpeg', '-y', '-v', 'error', '-i', raw, '-vf', f'{crop}scale={tw}:{th}:flags=lanczos', '-c:v', 'libwebp', '-quality', '76', '-compression_level', '6', dst], check=True)
         made.append((tw, th, f"assets/img/arsiv/{p['id']}-{tw}.webp"))
     made.sort(reverse=True)
     w0, h0, src0 = made[0]
