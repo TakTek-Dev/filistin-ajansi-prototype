@@ -39,3 +39,25 @@ Her dosya özgün lisansıyla yeniden boyutlandırılıp WebP biçimine çevrilm
 | p32-*.webp | Kudüs çevresi | creisor | CC BY-SA 2.0 | 2016 | https://commons.wikimedia.org/wiki/File:Jerusalem_(24779068031).jpg |
 | p33-*.webp | Damon Hapishanesi | Eranrabl | CC BY-SA 4.0 | 2017 | https://commons.wikimedia.org/wiki/File:Damon_Prison.jpg |
 | p34-*.webp | Ofer Hapishanesi | Danielrosehill | CC BY 4.0 | 2025 | https://commons.wikimedia.org/wiki/File:Ofer_Prison_near_Ramallah.jpg |
+| p35-*.webp | Kusra | יעקב | CC BY-SA 4.0 | 2019 | https://commons.wikimedia.org/wiki/File:Qusra7467.JPG |
+| p36-*.webp | Kudüs | Berthold Werner | CC BY-SA 3.0 | 2010 | https://commons.wikimedia.org/wiki/File:Jerusalem_Damaskustor_BW_1.jpg |
+| p37-*.webp | Tekua | Deror avi | CC BY-SA 3.0 | 2010 | https://commons.wikimedia.org/wiki/File:Herodion_IMG_0639.JPG |
+| p38-*.webp | Selfit | أمين | CC BY-SA 4.0 | 2024 | https://commons.wikimedia.org/wiki/File:Main_entrance_to_Salfit.jpg |
+| p39-*.webp | Arrabe | Rami Abunameh | CC BY-SA 3.0 | 2007 | https://commons.wikimedia.org/wiki/File:Arrabah.jpg |
+| p40-*.webp | Doğu Kudüs | 'Amer 'Aruri (B'Tselem) | CC BY 4.0 | 2014 | https://commons.wikimedia.org/wiki/File:Five_demolitions_in_East_Jerusalem,_January_2014_(1_6).jpg |
+| p41-*.webp | Burin | שי קנדלר | CC BY 4.0 | 2026 | https://commons.wikimedia.org/wiki/File:Burin_Nablus_1.jpg |
+| p42-*.webp | Ceba | أمين | CC BY-SA 4.0 | 2019 | https://commons.wikimedia.org/wiki/File:Jaba%27,_Jenin_001.jpg |
+| p43-*.webp | Marda (Selfit) | أمين | CC BY-SA 4.0 | 2020 | https://commons.wikimedia.org/wiki/File:Marda,_Salfit_02.jpg |
+| p44-*.webp | Ras Kerker | יעקב | CC BY-SA 4.0 | 2019 | https://commons.wikimedia.org/wiki/File:RasKarkar2348.JPG |
+| p45-*.webp | el-Yamun | Akram Abahre | CC BY-SA 3.0 | 2008 | https://commons.wikimedia.org/wiki/File:%D8%A8%D9%84%D8%AF%D8%A9_%D8%A7%D9%84%D9%8A%D8%A7%D9%85%D9%88%D9%86_%D8%AC%D9%86%D9%8A%D9%86_%D9%81%D9%84%D8%B3%D8%B7%D9%8A%D9%86_-_panoramio.jpg |
+| p46-*.webp | Tuffah Mahallesi (Gazze) | Soliman Hijjy | CC BY-SA 4.0 | 2019 | https://commons.wikimedia.org/wiki/File:An_aerial_photo_of_the_English_cemetery_in_Gaza_City,_a_gift_from_the_people_of_Palestine_to_Allied_soldiers_killed_in_the_1914-1918_war_in_memory_of_them._by_soliman_hijjy_2019.jpg |
+| p47-*.webp | İzna | יעקב | CC BY-SA 4.0 | 2016 | https://commons.wikimedia.org/wiki/File:Idhna7348_d27.JPG |
+| p48-*.webp | Mesafir Yatta (el-Fahit) | Palestine Bal | CC BY 4.0 | 2025 | https://commons.wikimedia.org/wiki/File:Al-Fakhit_village_school,_Masafer_Yatta.jpg |
+| p49-*.webp | İsaviye | יעקב | CC BY-SA 4.0 | 2016 | https://commons.wikimedia.org/wiki/File:Isawiya4219.JPG |
+| p50-*.webp | Telfit | יאיר דב | CC BY-SA 4.0 | 2026 | https://commons.wikimedia.org/wiki/File:%D7%AA%D7%9C%D7%A4%D7%99%D7%AA_%D7%9E%D7%93%D7%A8%D7%95%D7%9D.jpg |
+| p51-*.webp | Tell | أمين | CC BY-SA 4.0 | 2017 | https://commons.wikimedia.org/wiki/File:Tell,_Nablus_001.jpg |
+| p52-*.webp | Zevayde | مي حسنين | CC BY-SA 4.0 | 2026 | https://commons.wikimedia.org/wiki/File:%D9%85%D9%85%D8%B1%D8%A7%D8%AA_%D8%AE%D9%8A%D8%A7%D9%85_%D8%A7%D9%84%D9%86%D8%A7%D8%B2%D8%AD%D9%8A%D9%86_%D9%81%D9%8A_%D8%A8%D9%84%D8%AF%D8%A9_%D8%A7%D9%84%D8%B2%D9%88%D8%A7%D9%8A%D8%AF%D8%A9_%D8%A7%D9%84%D8%AA%D8%A7%D8%A8%D8%B9%D8%A9_%D9%84%D9%85%D8%AD%D8%A7%D9%81%D8%B8%D8%A9_%D8%AF%D9%8A%D8%B1_%D8%A7%D9%84%D8%A8%D9%84%D8%AD_2026_01.jpg |
+| p53-*.webp | Burin | ISM Palestine | CC BY-SA 2.0 | 2009 | https://commons.wikimedia.org/wiki/File:VandalisedOliveTree.jpg |
+| p54-*.webp | Megiddo Hapishanesi | James Emery | CC BY 2.0 | 2007 | https://commons.wikimedia.org/wiki/File:Megiddo_Prison_0675_(520317013).jpg |
+| p55-*.webp | Şeyh Rıdvan (Gazze) | Jaber Jehad Badwan | CC BY-SA 4.0 | 2025 | https://commons.wikimedia.org/wiki/File:Images_of_war_23-25_from_Gaza,_by_Jaber_Badwen,_IMG_5923.jpg |
+| p56-*.webp | Lubban eş-Şarkiye | יאיר דב | CC BY-SA 4.0 | 2026 | https://commons.wikimedia.org/wiki/File:%D7%9C%D7%95%D7%91%D7%90%D7%9F_%D7%90-%D7%A9%D7%A8%D7%A7%D7%99%D7%94.jpg |
